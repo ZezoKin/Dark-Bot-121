@@ -37,6 +37,51 @@ client.on('message', message => {
   .addField("**Server: **" , client.guilds.size)
   message.channel.sendEmbed(embed);
     }
+	client.on('message', message => {
+     
+  let args = message.content.split(" ").slice(1);
+if (message.content.startsWith(prefix + "ban")) {
+    if (message.channel.type == "dm") return;
+    if (message.author.bot) return;
+    if (message.author.codes) return;
+         
+  if(!message.guild.member(message.author).hasPermission("BAN_MEMBERS")) return;
+  if(!message.guild.member(client.user).hasPermission("BAN_MEMBERS")) return;
+  let user = message.mentions.users.first();
+  
+  if (message.mentions.users.size < 1) return message.reply('**Mention a User to Ban Him.**').then(message => message.delete(5000));
+  if (!message.guild.member(user).bannable) return message.reply("**I Can’t Ban This User**").then(message => message.delete(5000))
+  message.guild.member(user).ban(7, user);
+
+message.channel.send(`** ${user.tag} banned from the server.**  `).then(message => message.delete(10000))
+}
+});
+
+
+client.on('message', message => {
+  let args = message.content.split(" ").slice(1);
+if (message.content.startsWith(prefix + "kick")) {
+ if (message.channel.type == "dm") return;
+ if (message.author.bot) return;
+ if (message.author.codes) return;
+ if (message.author.kick) return;
+               
+  if(!message.guild.member(message.author).hasPermission("KICK_MEMBERS")) return;
+  if(!message.guild.member(client.user).hasPermission("KICK_MEMBERS")) return;
+  let user = message.mentions.users.first();
+ 
+
+  if (message.mentions.users.size < 1) return message.reply("**Mention a User to Kick Him.**").then(message => message.delete(5000))
+ 
+  if (!message.guild.member(user)
+  .bannable) return message.reply("**I Can’t Kick This User**").then(message => message.delete(5000))
+
+  message.guild.member(user).kick(7, user);
+
+  message.channel.send(`**${user.tag} Kicked From the Server.**`).then(message => message.delete(10000))
+
+}
+});
 if (message.content === '*help') {
          let embed = new Discord.RichEmbed()
 .setThumbnail(message.author.avatarURL)    
